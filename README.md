@@ -1,1 +1,138 @@
-# CongnitoLoginTest
+# Congitoを使ったサンプル
+
+以下をもとに検証してみた。
+
+[Amazon Cognitoを使ってシンプルなログイン画面を作ってみる](https://qiita.com/fkooo/items/660cab0090a80861155b)
+
+- [ユーザ登録画面](./signup.html)
+- [ユーザID(メールアドレス)認証画面](./confirm.html)
+- [ログイン画面](./auth.html)
+
+Authリクエスト
+
+Request Headers
+```text
+:authority: cognito-idp.ap-northeast-1.amazonaws.com
+:method: POST
+:path: /
+:scheme: https
+accept: */*
+accept-encoding: gzip, deflate, br
+accept-language: ja,en-US;q=0.9,en;q=0.8
+content-length: 923
+content-type: application/x-amz-json-1.1
+origin: http://localhost:63342
+referer: http://localhost:63342/
+sec-ch-ua: ".Not/A)Brand";v="99", "Google Chrome";v="103", "Chromium";v="103"
+sec-ch-ua-mobile: ?0
+sec-ch-ua-platform: "macOS"
+sec-fetch-dest: empty
+sec-fetch-mode: cors
+sec-fetch-site: cross-site
+user-agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36
+x-amz-content-sha256: 80f91ff4ec032964cc1f924288f08119de2683c53376bab9d30a2fc87d62b29b
+x-amz-target: AWSCognitoIdentityProviderService.InitiateAuth
+x-amz-user-agent: aws-sdk-js/2.6.4
+```
+
+Payload
+```json
+{
+  "AuthFlow": "USER_SRP_AUTH",
+  "ClientId": "1gn1voh183s0rfo0slhgqa7cui",
+  "AuthParameters": {
+    "USERNAME": "yuzurukanda@yahoo.co.jp",
+    "SRP_A": "9e228df8714cea5391d7d20b0ebdaec3ec21553481e342cb4b54f7ca3348be8c54a80b14e447b2d255502d89f835999cadebbb52cdbc28bb925e0d7dcdbb0c5202f57116a8fd0d94377a3b7f29708b184817f134185905fb8bc9abb2f1d688547029df7aabc52ec0117af9a014ab04a1353d59c575789b04f598d944866819ff0e515295eb75f12a260861972a2eb2b238ff466387cf855e9714465c573f27e82222e4010e5604d519fe9b0fd6784d670101c4774895219a08302468314f9050e3b0f79700401c0bde8303993761b07746764f538f9cdbcd43de8f66bf8f1aa7c6b16a90f2f9a5366b3a3b44064bb9928e58c8e3d62873887de755cdfbb8b61d90fe85d882ec2a24fe6c5f8154e5b89274473fb8f421090cd10d668dbea57e49ae96a59687cb9ca87f6045220b72460ccf5b875f6a42f39aa8329b4fc0bab8499d5888d7cb79ff491d06acb4fd746804ec6a476206218dc1ee42506834178ea55ac964e648604eea0eb0b9750376e9d3e03adf740d772a94f8f43050a2d9b732"
+  },
+  "ClientMetadata": {}
+}
+```
+
+Response Headers
+```text
+access-control-allow-origin: *
+access-control-expose-headers: x-amzn-RequestId,x-amzn-ErrorType,x-amzn-ErrorMessage,Date
+content-length: 2731
+content-type: application/x-amz-json-1.1
+date: Sun, 07 Aug 2022 17:38:25 GMT
+x-amzn-requestid: 797af2d8-63d7-4f39-a836-409a06b068a1
+```
+
+Response Body
+```json
+
+{
+  "ChallengeName": "PASSWORD_VERIFIER",
+  "ChallengeParameters": {
+    "SALT": "f4a0f70ea396e3ba57f9cf0df9868b16",
+    "SECRET_BLOCK": "I/dncLRbMRqSW2xq96lht+TnKFMas46JrRx6CM4jqhXQq6BpIg3c7QE6PkZ0Mm07iOjRJv4ZuOcuS63Vl3FZe4tNxhle2YaeF0rAPAWbI4xTq6LNCE96HdTFkab1BuuxGo40AAli25FxGlWr+aZKOLqpOxIGzwh9PJUkkGKOrTt09ByN+6EAq4iYQbt/KRnv8l0oNhqJpO87JWsk6PWupoDkczbF6Uh7fE/4MBemcqOMV7sxJrkyDFSwe2uU/7nIiIbjiYaN99NMq3JkJDa59MZ3RiKoLTHVMUHIOcBA2mDxfqjftsE0zENfbE3x/tHxtPx9KXPWhHJgx6Y27ccT0LOb4UMyTnc4q7XlVng88DpgXfSLdTZqgGdRQNdmfl94+VATm+rCVXUNUX+P9ekXN56nOrQatCSH9j19Czdw9M94y8k+7cddrptV9bSgi9c36DP8jiiWnZD+bJ7y8ASebxbgk9I1L7tfSnbmTyjA9pcDo7JHnaQpTw3ktDLra01Nc854NsIW6tMxqiveTOjM9sVr9T1ALUqizzSUYQhFVRvPwIKSKxdfnzuiWg6jwzongyGy1nnUgJxQ5CKI/RNjjttRKh2Gz69ShTszbVx8BdjgMtELNEKL797oUgj8b3yLIkRh1cJIw2rUU0zb4smKgfmPfM4C7Nops6MeHuG2ekym9Qs7A3Pea4hfFi5yu2DkocKcvbUnxAVSrvZpDbOc1OaZ9vormvaVQThSZ4ahWawzX8oIVORnLWHc0UYrPcmI6KkbxzFXnh1iM8WQ97uJFuyUfPJt38WNCHsRA8HimTToEbYicBSwaBGG9xIxVR0hpTnOE1XE6HDroKLReEFODj6sNy3ZLX80W5pb9iWCfqUFGR3ev1ZXPgemVPxxwarWLd05fope+MhaO4EpX6an9KunSL5Nvtw0Aq1hVRFFfm/ndDY1uKxj+iWxzW9AGevm6eaORZ+puVZTGJMhGgUBtTcNM6Ts+rCDO5eGMFJn8Lj42dUDAp0vRKuyZ8sAykuJu3fWWvnByS/c5WeUqSSAz4gno271/6/f8XHbIrE07cTpiiNdJZKhwCjjGcAh9MYqPw9s3pol/7Qcxenxg2xw8mWn7GJ9Wn8QTw/aX/LbVCbU8E82i0aGXtxFTOvj9U3dXtYnaHuOlDhBxrC06jZPZH8MwtcoMQPHvLeHY3/oZ8NeENUJqAtdz5v+XidMiVvy34Cx10ILBoY/shKHty3IUuqcPB/c7+7xJsOdSamRQoAIuJg5iV0WIosLVP2/X14yE0s/ZNPRRrT49z9WOuCK/i4zxshKKQp5D2qPVNCfO7Iyd7mECy0TPjOgntbAQbTrCywdi9uO5+6Rpa8xDfIKdu1U/hzQHHpKV7vzL1a5RCmkIFaDktoGlevxHgxDSZtr7NYVDeMCYCDVCigC6VTL8Ps71SZqvt9zvYiTSaMZyVzY8dZ1PiHIKJCb5SemDOH5JjmfeOzUr4hXxl//UHKx32gEcDlmPVtu0uEuan8hSHrPiUC8UV3bkNliLLY4xDRJHGeGA1OqNFAYaKDFda3BhueFsTBi3ye/agAOAetfytMf9fUnx/3raYvTZscJRnm8mCOdfFlV9kZMFUCAiu/NWNH/5n0TJnVBgCqYmY2r1dH7h7cWdyG1ET7W1UpZOqyXjgywlgmE9jyWKi5k53hO5Odrs/upVm75oBS1uHDuWCnOuIj1jsqsrejNKA==",
+    "SRP_B": "cd4807247641c9f5be457eba50c5d591ba801b6ebc4d5f7bcdd1ef68829c85bd8d30d95bd9c3d9f94eda60b726517bf6cb6082b967fbe34b4c2069c8dfa6f19987fe3f5bee52a9231df522a49a32cee25194a31b1be409fa2c02dfbf13a6dc57b7ba82d07bab667f550648d7468cfc3ad8de9feea73d53c75e12a27c4d18128bbc9c20bd0a35864bbd5c2f9a738b4adc75a2fb0b1de806c96f47093f0962d6da2a0b4a4da95f8f57aba923cc98f04f8197e7c023abbc784950eb500d0eae7547f83130c164ff826bf8cba2904c27d3397a0a9001c7b5620efa39323b24c320bac192962d58f2ad0dd95898974fdb43d70f0a5312eeefc56aab7931ada9ce4506baa8c4a9e38265612411c24222d195dc7e18f19da1ecac2aa58f520918e812541a11e77c9aa0d60353def9a0ff17595e9ea6c7c2c9cb5d505cd5b75ffa32fd640f539f08f2d5105591962d87590bc9f51e75768c9e5b06e1c087d7b52eb5e52b15e4c8cfe9765567300989af930691370be6d15ee13a9703a8ef1fed034db9f4",
+    "USERNAME": "8454abfb-edc0-4611-b7cf-d88622c52d57",
+    "USER_ID_FOR_SRP": "8454abfb-edc0-4611-b7cf-d88622c52d57"
+  }
+}
+```
+
+Request Headers
+```text
+:authority: cognito-idp.ap-northeast-1.amazonaws.com
+:method: POST
+:path: /
+:scheme: https
+accept: */*
+accept-encoding: gzip, deflate, br
+accept-language: ja,en-US;q=0.9,en;q=0.8
+content-length: 2023
+content-type: application/x-amz-json-1.1
+origin: http://localhost:63342
+referer: http://localhost:63342/
+sec-ch-ua: ".Not/A)Brand";v="99", "Google Chrome";v="103", "Chromium";v="103"
+sec-ch-ua-mobile: ?0
+sec-ch-ua-platform: "macOS"
+sec-fetch-dest: empty
+sec-fetch-mode: cors
+sec-fetch-site: cross-site
+user-agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36
+x-amz-content-sha256: 5d8e5a7b5e0c89f1356c3ea688bf79b76053d70ef201de771e80c8889f3d3420
+x-amz-target: AWSCognitoIdentityProviderService.RespondToAuthChallenge
+x-amz-user-agent: aws-sdk-js/2.6.4
+```
+
+Payload
+```json
+{
+  "ChallengeName": "PASSWORD_VERIFIER",
+  "ClientId": "1gn1voh183s0rfo0slhgqa7cui",
+  "ChallengeResponses": {
+    "USERNAME": "8454abfb-edc0-4611-b7cf-d88622c52d57",
+    "PASSWORD_CLAIM_SECRET_BLOCK": "I/dncLRbMRqSW2xq96lht+TnKFMas46JrRx6CM4jqhXQq6BpIg3c7QE6PkZ0Mm07iOjRJv4ZuOcuS63Vl3FZe4tNxhle2YaeF0rAPAWbI4xTq6LNCE96HdTFkab1BuuxGo40AAli25FxGlWr+aZKOLqpOxIGzwh9PJUkkGKOrTt09ByN+6EAq4iYQbt/KRnv8l0oNhqJpO87JWsk6PWupoDkczbF6Uh7fE/4MBemcqOMV7sxJrkyDFSwe2uU/7nIiIbjiYaN99NMq3JkJDa59MZ3RiKoLTHVMUHIOcBA2mDxfqjftsE0zENfbE3x/tHxtPx9KXPWhHJgx6Y27ccT0LOb4UMyTnc4q7XlVng88DpgXfSLdTZqgGdRQNdmfl94+VATm+rCVXUNUX+P9ekXN56nOrQatCSH9j19Czdw9M94y8k+7cddrptV9bSgi9c36DP8jiiWnZD+bJ7y8ASebxbgk9I1L7tfSnbmTyjA9pcDo7JHnaQpTw3ktDLra01Nc854NsIW6tMxqiveTOjM9sVr9T1ALUqizzSUYQhFVRvPwIKSKxdfnzuiWg6jwzongyGy1nnUgJxQ5CKI/RNjjttRKh2Gz69ShTszbVx8BdjgMtELNEKL797oUgj8b3yLIkRh1cJIw2rUU0zb4smKgfmPfM4C7Nops6MeHuG2ekym9Qs7A3Pea4hfFi5yu2DkocKcvbUnxAVSrvZpDbOc1OaZ9vormvaVQThSZ4ahWawzX8oIVORnLWHc0UYrPcmI6KkbxzFXnh1iM8WQ97uJFuyUfPJt38WNCHsRA8HimTToEbYicBSwaBGG9xIxVR0hpTnOE1XE6HDroKLReEFODj6sNy3ZLX80W5pb9iWCfqUFGR3ev1ZXPgemVPxxwarWLd05fope+MhaO4EpX6an9KunSL5Nvtw0Aq1hVRFFfm/ndDY1uKxj+iWxzW9AGevm6eaORZ+puVZTGJMhGgUBtTcNM6Ts+rCDO5eGMFJn8Lj42dUDAp0vRKuyZ8sAykuJu3fWWvnByS/c5WeUqSSAz4gno271/6/f8XHbIrE07cTpiiNdJZKhwCjjGcAh9MYqPw9s3pol/7Qcxenxg2xw8mWn7GJ9Wn8QTw/aX/LbVCbU8E82i0aGXtxFTOvj9U3dXtYnaHuOlDhBxrC06jZPZH8MwtcoMQPHvLeHY3/oZ8NeENUJqAtdz5v+XidMiVvy34Cx10ILBoY/shKHty3IUuqcPB/c7+7xJsOdSamRQoAIuJg5iV0WIosLVP2/X14yE0s/ZNPRRrT49z9WOuCK/i4zxshKKQp5D2qPVNCfO7Iyd7mECy0TPjOgntbAQbTrCywdi9uO5+6Rpa8xDfIKdu1U/hzQHHpKV7vzL1a5RCmkIFaDktoGlevxHgxDSZtr7NYVDeMCYCDVCigC6VTL8Ps71SZqvt9zvYiTSaMZyVzY8dZ1PiHIKJCb5SemDOH5JjmfeOzUr4hXxl//UHKx32gEcDlmPVtu0uEuan8hSHrPiUC8UV3bkNliLLY4xDRJHGeGA1OqNFAYaKDFda3BhueFsTBi3ye/agAOAetfytMf9fUnx/3raYvTZscJRnm8mCOdfFlV9kZMFUCAiu/NWNH/5n0TJnVBgCqYmY2r1dH7h7cWdyG1ET7W1UpZOqyXjgywlgmE9jyWKi5k53hO5Odrs/upVm75oBS1uHDuWCnOuIj1jsqsrejNKA==",
+    "TIMESTAMP": "Sun Aug 7 17:38:25 UTC 2022",
+    "PASSWORD_CLAIM_SIGNATURE": "KZZDJpfm+nF9RGWJ6lefmuzpYHbA8o7yfB0zHx+ht7A="
+  }
+}
+```
+
+Response Headers
+```text
+access-control-allow-origin: *
+access-control-expose-headers: x-amzn-RequestId,x-amzn-ErrorType,x-amzn-ErrorMessage,Date
+content-length: 4130
+content-type: application/x-amz-json-1.1
+date: Sun, 07 Aug 2022 17:38:26 GMT
+x-amzn-requestid: 17766ac1-5054-4d7d-8755-3ae4ab341d76
+```
+
+Response Body
+```json
+
+{
+  "AuthenticationResult": {
+    "AccessToken": "eyJraWQiOiJZdGZLZVVtb045QkgzeVd5aDRjN2hkUnZYUE1nd1wvdW5yUzBaR2lQaWtRZz0iLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOiI4NDU0YWJmYi1lZGMwLTQ2MTEtYjdjZi1kODg2MjJjNTJkNTciLCJpc3MiOiJodHRwczpcL1wvY29nbml0by1pZHAuYXAtbm9ydGhlYXN0LTEuYW1hem9uYXdzLmNvbVwvYXAtbm9ydGhlYXN0LTFfNVdlUHEyZ2huIiwiY2xpZW50X2lkIjoiMWduMXZvaDE4M3MwcmZvMHNsaGdxYTdjdWkiLCJvcmlnaW5fanRpIjoiZWRlYjI2YTQtNWFhYy00ZDkxLWI3ZmYtMTk4ODcwYWNhYmIxIiwiZXZlbnRfaWQiOiIxNzc2NmFjMS01MDU0LTRkN2QtODc1NS0zYWU0YWIzNDFkNzYiLCJ0b2tlbl91c2UiOiJhY2Nlc3MiLCJzY29wZSI6ImF3cy5jb2duaXRvLnNpZ25pbi51c2VyLmFkbWluIiwiYXV0aF90aW1lIjoxNjU5ODkzOTA2LCJleHAiOjE2NTk4OTc1MDYsImlhdCI6MTY1OTg5MzkwNiwianRpIjoiYzRmYjA0M2MtZDRkNi00M2NkLWJmYjYtMTI0YjQ2YmJjMGFiIiwidXNlcm5hbWUiOiI4NDU0YWJmYi1lZGMwLTQ2MTEtYjdjZi1kODg2MjJjNTJkNTcifQ.OHsx6IGcckJ8KA-JsNRrrbRWiagPs8N6gRHG1Sw79y0xY9Da5liI-YAU7TlAuNEuNT3jtWVuesP9Obft1kUuSwyqPEagXezy_RG0gqhbhVhdR2OMpY_AVeI5YbL-6EmWiHu9ddzJ1THZOtNT5Ylxc_voKVoMKwXMFjKtVnPw_KVRVhL-lcYJ0hmQYPEl_QWu73gzil9hJIHChCEAZ7YHCFvSU38ZkHHCtbLBvUynvNyli8StESfGyOaX7MmC-EOjky4xtKx3Nys9q_e-_VIZKvwonK1IbxkJar2xa7Z0S8SV3MjTiNyNab1pyynVPesOvvOFxV_Bk-rycv3sC1LZ2A",
+    "ExpiresIn": 3600,
+    "IdToken": "eyJraWQiOiJ1bFQ2aXlzUDJqQ0NYUldFdlJOSTJIMlhWYzNNaTV2eGxvNDBhVVE1TytrPSIsImFsZyI6IlJTMjU2In0.eyJzdWIiOiI4NDU0YWJmYi1lZGMwLTQ2MTEtYjdjZi1kODg2MjJjNTJkNTciLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZSwiaXNzIjoiaHR0cHM6XC9cL2NvZ25pdG8taWRwLmFwLW5vcnRoZWFzdC0xLmFtYXpvbmF3cy5jb21cL2FwLW5vcnRoZWFzdC0xXzVXZVBxMmdobiIsImNvZ25pdG86dXNlcm5hbWUiOiI4NDU0YWJmYi1lZGMwLTQ2MTEtYjdjZi1kODg2MjJjNTJkNTciLCJvcmlnaW5fanRpIjoiZWRlYjI2YTQtNWFhYy00ZDkxLWI3ZmYtMTk4ODcwYWNhYmIxIiwiYXVkIjoiMWduMXZvaDE4M3MwcmZvMHNsaGdxYTdjdWkiLCJldmVudF9pZCI6IjE3NzY2YWMxLTUwNTQtNGQ3ZC04NzU1LTNhZTRhYjM0MWQ3NiIsInRva2VuX3VzZSI6ImlkIiwiYXV0aF90aW1lIjoxNjU5ODkzOTA2LCJleHAiOjE2NTk4OTc1MDYsImlhdCI6MTY1OTg5MzkwNiwianRpIjoiNjc2N2IyZDItZDI4NS00ZTc5LWI1MTctNjhmMDU5MTIzODcwIiwiZW1haWwiOiJ5dXp1cnVrYW5kYUB5YWhvby5jby5qcCJ9.ctD81cxo-Eq9eyc18e3SSwYJ2tAeXEJRZz1RwauaUqkpSwu57O-H_w09IEDzc0w6PF44w3M2A5nhgRah_3chHqA8aLwyaAeCttdyehvAKiHhv0U7Oz5iUxFdgsx0Qqy21MPhP-x1eQJw8pyTB_FOGEqdAoNbgglM_NkFVAlaf5GuqHo_Pa-T3XxI9UUqcG4MCCedbJSXt4LIC-f15IS_GfFOTgNP0aRjxfoM4DTMUZo7JqbXcX55bHN2OzllFzujQKpOUPzta6hHLVtMNV3MA4IY4cDf-cyQxlgwzo-vE61gLz57XyPMItd_OiQja6Ae-SatixCDWbB2Sl-5tRRM3w",
+    "RefreshToken": "eyJjdHkiOiJKV1QiLCJlbmMiOiJBMjU2R0NNIiwiYWxnIjoiUlNBLU9BRVAifQ.cIoj8diXNE9KctqZ5cKeI3LxLPd6p-vv-wp1A43LxcCQ1iaEo_iwjoGDlkIq62IJm5JaLmpz7JtygQWc8V5E-2Zp6pTWcBM_-xAxa0JSLeh13J-UG4MUrMqsHQykIiuFSYlOEu_uHES1SVVqvW6YoZRqUNHjSs21NAmwxwUCExtv-eKWLNb9ad_3WY1Npz4BIhrE98fRQJyi5nMGtfomxqVIS39k3MIDTSBUEhdloHJ4DNbZtOuTW2oHMm9AEyBOwgVS1NkQa17HUoHZ1Ybn3XRystAArCdAd_WQ6Zvmkjy9jEltZhP43Ef9RmZd1WPGoSjI4V9qHkDdwLHsccNIlQ.KYhZfS3yBUIRXRWO.YrSOo8whsMqMJfuFM7bQtBxysYAReu6c9h70wtDWfZsDPzOO5jvQrHzcE3WPrbUvY9JzXLxbAfEavmbkLU6Bj0jcqwhSBZ0BBtiNToLtK6S32BciT84wRUUgWY_WP-A9yZNLWj_KNXLGiQSU8R747SvkpzuG_e71RCsinbGCbwF5dWGLyU-WLoD-iIC7sPPLZTBD5FZhXCKWgTDnq-UR6Ud45NTWEwPSHPmgRn7AV6eJB1UuS7Pvmy0N5c5M1cqT5477cEg27nIqRxv5-vxdO1bm3qtvA5J63xlpD_rhjIBfYJadVlUk1GlsN3Z7IpwS6jzxtZctJrVWKoSoV4G20QXdcKvco8tuLM0Htq7vYksgRcZmCeHI-3AV16FYFj425HHKuni7WrZoXpk82ZrZ40kHZk1OtOBVW4Q87d59NnXi3d2kElB4H61bZHf4nIZ8JAzs2zkT30iTTBDi0uy8kJ2-dyUZhjFBhtxn8A-REhSROcOHuf3YIvfJU5tC-ZI9h7jVaMDiuL9i72o-nhhlAzokT2bPdbpS3lWoIx-NOJYKSj2js3cYmv1hKwamO6kSp1xP_8LQRrRZHc-zKcNeKNs8DGgT_w6W76VbCGqXT6ScOrCGckd6lp1qVZpN5Z8z-DfRc_DQ6X1nNEkcWCk5-wO6eZ7AjLZS4O1pt0N-yVwtEM5RElPEaO5gxdNVvm_LvVMDmcJlCWEg6_AAEks9bJurfR5bXPaR3GESYsdGA3hjG3UNulsMZmVBdvIB8vo4glDq2AmYG4KUUn7jaxyJWddPwJp1-RxoI1OBklMZMlLT3Sms3Y88G6MBOTlqF9vs1RnS6J09z0_Tu2OY0unm8PEA9Xm6j_zmqGvL8Hfae9Ay2eDKo2RqIRNkDkfxuxF6v3DrGkiQPix942vg5S-dKjLnHgWuTaI1tITrd-YiL6VfDVA9HKz7j7omcVQySg4hMSRncEPrdDKfMsrFfhN-Chn7uPue8qUanE9fNyR7b85XNlSJFEcollbFi9MEiP9FlP2IEBB5szQAaikpaHo5V5jeHwg5tSqojQLVsAwamprVuTaH_E59uRnnBVhfTKpj50mQ2DdIB9kONcBN6-t0ZE31GHz8CBHmuGcehCw3xCwHR30868CQ0lSPinGCoMUQ15jaeP14aTuzLkjugQM0W7dCWvDhq9fbHJzhRq88Os4AQxjTVbqd0IOAVvTIu6-olHO75kkYMRu7vCYqbhmluAl_wlnXFjLQh0ZArCCLKTo4j1BLV__Uw2BX6kpxw3LwLk_SJ-GBg47qJlXiVP23NQlFDdKawtTwbNdDihJDf80FFPalirot2p6XXhi2LESfF8yhGQbvozDyBQ.DlC1vlKadrYAIOiq6VwnRA",
+    "TokenType": "Bearer"
+  },
+  "ChallengeParameters": {}
+}
+```
